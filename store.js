@@ -9,11 +9,8 @@ function statement(customer, movies) {
         if (movie.code === "new" && rental.days > 2) return 2; else return 1;
     };
 
-    for (let rental of customer.rentals) {
-        let movie = movies[rental.movieID];
+    let thisAmountInc = function (movie, rental) {
         let thisAmount = 0;
-
-        // determine amount for each movie
         switch (movie.code) {
             case "regular":
                 thisAmount = 2;
@@ -31,8 +28,15 @@ function statement(customer, movies) {
                 }
                 break;
         }
+        return thisAmount;
+    };
+
+    for (let rental of customer.rentals) {
+        let movie = movies[rental.movieID];
+        let thisAmount = 0;
 
         frequentRenterPoints += frequentRenterPointsInc(movie, rental);
+        thisAmount = thisAmountInc(movie, rental);
 
         //print figures for this rental
         result += `\t${movie.title}\t${thisAmount}\n`;
