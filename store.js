@@ -27,10 +27,10 @@ function statement(customer, movies) {
         break;
     }
 
-    //add frequent renter points
-    frequentRenterPoints++;
-    // add bonus for a two day new release rental
-    if (movie.code === "new" && rental.days > 2) frequentRenterPoints++;
+    let frequentRenterPointsInc = function(movie, rental) {
+      if (movie.code === "new" && rental.days > 2) return 2; else return 1;
+    };
+    frequentRenterPoints += frequentRenterPointsInc(movie, rental);
 
     //print figures for this rental
     result += `\t${movie.title}\t${thisAmount}\n`;
