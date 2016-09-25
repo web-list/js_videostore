@@ -1,11 +1,11 @@
 "use strict";
 
-let frequentRenterPointsInc = function (rental) {
+function getFrequentRenterPoints(rental) {
     let movie = getMovie(rental.movieID);
     if (movie.code === "new" && rental.days > 2) return 2; else return 1;
-};
+}
 
-let thisAmountInc = function (rental) {
+function getAmount(rental) {
     let thisAmount = 0;
     let movie = getMovie(rental.movieID);
     switch (movie.code) {
@@ -26,32 +26,32 @@ let thisAmountInc = function (rental) {
             break;
     }
     return thisAmount;
-};
+}
 
-let getTotalAmount = function(customer) {
+function getTotalAmount(customer) {
     let totalAmount = 0;
     for (let rental of customer.rentals) {
-        totalAmount += thisAmountInc(rental);
+        totalAmount += getAmount(rental);
     }
     return totalAmount;
-};
+}
 
-let getTotalFrequentPoints = function(customer) {
+function getTotalFrequentPoints(customer) {
     let totalFrequentPoints = 0;
     for (let rental of customer.rentals) {
-        totalFrequentPoints += frequentRenterPointsInc(rental);
+        totalFrequentPoints += getFrequentRenterPoints(rental);
     }
     return totalFrequentPoints;
-};
+}
 
-let getMovie = function(movieID) {
-  return movies[movieID];
-};
+function getMovie(movieID) {
+    return movies[movieID];
+}
 
 function textStatement(customer) {
     let result = `Rental Record for ${customer.name}\n`;
     for (let rental of customer.rentals) {
-        result += `\t${getMovie(rental.movieID).title}\t${thisAmountInc(rental)}\n`;
+        result += `\t${getMovie(rental.movieID).title}\t${getAmount(rental)}\n`;
     }
     result += `Amount owed is ${getTotalAmount(customer)}\n`;
     result += `You earned ${getTotalFrequentPoints(customer)} frequent renter points\n`;
@@ -61,7 +61,7 @@ function textStatement(customer) {
 function htmlStatement(customer) {
     let result = `<h1>Rental Record for ${customer.name}</h1>\n`;
     for (let rental of customer.rentals) {
-        result += `<p>${getMovie(rental.movieID).title}\t${thisAmountInc(rental)}</p>\n`;
+        result += `<p>${getMovie(rental.movieID).title}\t${getAmount(rental)}</p>\n`;
     }
     result += `<p>Amount owed is ${getTotalAmount(customer)}</p>\n`;
     result += `<p>You earned ${getTotalFrequentPoints(customer)} frequent renter points</p>\n`;
