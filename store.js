@@ -1,11 +1,13 @@
 "use strict";
 
-let frequentRenterPointsInc = function (movie, rental) {
+let frequentRenterPointsInc = function (rental) {
+    let movie = getMovie(rental.movieID);
     if (movie.code === "new" && rental.days > 2) return 2; else return 1;
 };
 
-let thisAmountInc = function (movie, rental) {
+let thisAmountInc = function (rental) {
     let thisAmount = 0;
+    let movie = getMovie(rental.movieID);
     switch (movie.code) {
         case "regular":
             thisAmount = 2;
@@ -26,43 +28,43 @@ let thisAmountInc = function (movie, rental) {
     return thisAmount;
 };
 
-let getTotalAmount = function(customer, movies) {
+let getTotalAmount = function(customer) {
     let totalAmount = 0;
     for (let rental of customer.rentals) {
-        let movie = movies[rental.movieID];
-        totalAmount += thisAmountInc(movie, rental);
+        totalAmount += thisAmountInc(rental);
     }
     return totalAmount;
 };
 
-let getTotalFrequentPoints = function(customer, movies) {
+let getTotalFrequentPoints = function(customer) {
     let totalFrequentPoints = 0;
     for (let rental of customer.rentals) {
-        let movie = movies[rental.movieID];
-        totalFrequentPoints += frequentRenterPointsInc(movie, rental);
+        totalFrequentPoints += frequentRenterPointsInc(rental);
     }
     return totalFrequentPoints;
 };
 
-function textStatement(customer, movies) {
+let getMovie = function(movieID) {
+  return movies[movieID];
+};
+
+function textStatement(customer) {
     let result = `Rental Record for ${customer.name}\n`;
     for (let rental of customer.rentals) {
-        let movie = movies[rental.movieID];
-        result += `\t${movie.title}\t${thisAmountInc(movie, rental)}\n`;
+        result += `\t${getMovie(rental.movieID).title}\t${thisAmountInc(rental)}\n`;
     }
-    result += `Amount owed is ${getTotalAmount(customer, movies)}\n`;
-    result += `You earned ${getTotalFrequentPoints(customer, movies)} frequent renter points\n`;
+    result += `Amount owed is ${getTotalAmount(customer)}\n`;
+    result += `You earned ${getTotalFrequentPoints(customer)} frequent renter points\n`;
     return result;
 }
 
-function htmlStatement(customer, movies) {
+function htmlStatement(customer) {
     let result = `<h1>Rental Record for ${customer.name}</h1>\n`;
     for (let rental of customer.rentals) {
-        let movie = movies[rental.movieID];
-        result += `<p>${movie.title}\t${thisAmountInc(movie, rental)}</p>\n`;
+        result += `<p>${getMovie(rental.movieID).title}\t${thisAmountInc(rental)}</p>\n`;
     }
-    result += `<p>Amount owed is ${getTotalAmount(customer, movies)}</p>\n`;
-    result += `<p>You earned ${getTotalFrequentPoints(customer, movies)} frequent renter points</p>\n`;
+    result += `<p>Amount owed is ${getTotalAmount(customer)}</p>\n`;
+    result += `<p>You earned ${getTotalFrequentPoints(customer)} frequent renter points</p>\n`;
     return result;
 }
 
