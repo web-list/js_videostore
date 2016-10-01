@@ -81,10 +81,10 @@ function textStatement(customerParams, moviesParams) {
     const customer = new Customer(customerParams, moviesParams);
     let result = `Rental Record for ${customer.name}\n`;
     for (let rental of customer.rentals) {
-        result += `\t${rental.movie.title}\t${getAmount(rental, movies)}\n`;
+        result += `\t${rental.movie.title}\t${getAmount(rental)}\n`;
     }
-    result += `Amount owed is ${getTotalAmount(customer, movies)}\n`;
-    result += `You earned ${getTotalFrequentPoints(customer, movies)} frequent renter points\n`;
+    result += `Amount owed is ${getTotalAmount(customer)}\n`;
+    result += `You earned ${getTotalFrequentPoints(customer)} frequent renter points\n`;
     return result;
 }
 
@@ -92,10 +92,10 @@ function htmlStatement(customerParams, moviesParams) {
     const customer = new Customer(customerParams, moviesParams);
     let result = `<h1>Rental Record for ${customer.name}</h1>\n`;
     for (let rental of customer.rentals) {
-        result += `<p>${rental.movie.title}\t${getAmount(rental, movies)}</p>\n`;
+        result += `<p>${rental.movie.title}\t${getAmount(rental)}</p>\n`;
     }
-    result += `<p>Amount owed is ${getTotalAmount(customer, movies)}</p>\n`;
-    result += `<p>You earned ${getTotalFrequentPoints(customer, movies)} frequent renter points</p>\n`;
+    result += `<p>Amount owed is ${getTotalAmount(customer)}</p>\n`;
+    result += `<p>You earned ${getTotalFrequentPoints(customer)} frequent renter points</p>\n`;
     return result;
 }
 
