@@ -39,7 +39,7 @@ function getFrequentRenterPoints(rental) {
     if (rental.movie.code === "new" && rental.days > 2) return 2; else return 1;
 }
 
-function getAmount(rental, movies) {
+function getAmount(rental) {
     let thisAmount = 0;
     switch (rental.movie.code) {
         case "regular":
@@ -61,24 +61,24 @@ function getAmount(rental, movies) {
     return thisAmount;
 }
 
-function getTotalAmount(customer, movies) {
+function getTotalAmount(customer) {
     let totalAmount = 0;
     for (let rental of customer.rentals) {
-        totalAmount += getAmount(rental, movies);
+        totalAmount += getAmount(rental);
     }
     return totalAmount;
 }
 
-function getTotalFrequentPoints(customer, movies) {
+function getTotalFrequentPoints(customer) {
     let totalFrequentPoints = 0;
     for (let rental of customer.rentals) {
-        totalFrequentPoints += getFrequentRenterPoints(rental, movies);
+        totalFrequentPoints += getFrequentRenterPoints(rental);
     }
     return totalFrequentPoints;
 }
 
-function textStatement(customerParams, movies) {
-    const customer = new Customer(customerParams, movies);
+function textStatement(customerParams, moviesParams) {
+    const customer = new Customer(customerParams, moviesParams);
     let result = `Rental Record for ${customer.name}\n`;
     for (let rental of customer.rentals) {
         result += `\t${rental.movie.title}\t${getAmount(rental, movies)}\n`;
@@ -88,8 +88,8 @@ function textStatement(customerParams, movies) {
     return result;
 }
 
-function htmlStatement(customerParams, movies) {
-    const customer = new Customer(customerParams, movies);
+function htmlStatement(customerParams, moviesParams) {
+    const customer = new Customer(customerParams, moviesParams);
     let result = `<h1>Rental Record for ${customer.name}</h1>\n`;
     for (let rental of customer.rentals) {
         result += `<p>${rental.movie.title}\t${getAmount(rental, movies)}</p>\n`;
