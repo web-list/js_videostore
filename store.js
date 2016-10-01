@@ -1,14 +1,47 @@
 "use strict";
 
-function getFrequentRenterPoints(rental, movies) {
-    let movie = getMovie(rental.movieID, movies);
-    if (movie.code === "new" && rental.days > 2) return 2; else return 1;
+class Customer {
+    constructor(data, movies) {
+        this._data = data;
+        this._movies = movies;
+    }
+
+    get name() {
+        return this._data.name;
+    }
+
+    get rentals() {
+        return this._data.rentals.map(rentalParams => new Rental(rentalParams, this._movies));
+    }
+
+}
+
+class Rental {
+    constructor(data, movies) {
+        this._data = data;
+        this._movies = movies;
+    }
+
+    get movieID() {
+        return this._data.movieID;
+    }
+
+    get movie() {
+        return this._movies[this.movieID];
+    }
+
+    get days() {
+        return this._data.days;
+    }
+}
+
+function getFrequentRenterPoints(rental) {
+    if (rental.movie.code === "new" && rental.days > 2) return 2; else return 1;
 }
 
 function getAmount(rental, movies) {
     let thisAmount = 0;
-    let movie = getMovie(rental.movieID, movies);
-    switch (movie.code) {
+    switch (rental.movie.code) {
         case "regular":
             thisAmount = 2;
             if (rental.days > 2) {
@@ -44,24 +77,22 @@ function getTotalFrequentPoints(customer, movies) {
     return totalFrequentPoints;
 }
 
-function getMovie(movieID, movies) {
-    return movies[movieID];
-}
-
-function textStatement(customer, movies) {
+function textStatement(customerParams, movies) {
+    const customer = new Customer(customerParams, movies);
     let result = `Rental Record for ${customer.name}\n`;
     for (let rental of customer.rentals) {
-        result += `\t${getMovie(rental.movieID, movies).title}\t${getAmount(rental, movies)}\n`;
+        result += `\t${rental.movie.title}\t${getAmount(rental, movies)}\n`;
     }
     result += `Amount owed is ${getTotalAmount(customer, movies)}\n`;
     result += `You earned ${getTotalFrequentPoints(customer, movies)} frequent renter points\n`;
     return result;
 }
 
-function htmlStatement(customer, movies) {
+function htmlStatement(customerParams, movies) {
+    const customer = new Customer(customerParams, movies);
     let result = `<h1>Rental Record for ${customer.name}</h1>\n`;
     for (let rental of customer.rentals) {
-        result += `<p>${getMovie(rental.movieID, movies).title}\t${getAmount(rental, movies)}</p>\n`;
+        result += `<p>${rental.movie.title}\t${getAmount(rental, movies)}</p>\n`;
     }
     result += `<p>Amount owed is ${getTotalAmount(customer, movies)}</p>\n`;
     result += `<p>You earned ${getTotalFrequentPoints(customer, movies)} frequent renter points</p>\n`;
