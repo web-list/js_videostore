@@ -22,6 +22,14 @@ class Customer {
         return totalAmount;
     }
 
+    get totalFrequentPoints() {
+        let totalFrequentPoints = 0;
+        for (let rental of this.rentals) {
+            totalFrequentPoints += rental.frequentRenterPoints;
+        }
+        return totalFrequentPoints;
+    }
+
 }
 
 class Rental {
@@ -69,14 +77,6 @@ class Rental {
     }
 }
 
-function getTotalFrequentPoints(customer) {
-    let totalFrequentPoints = 0;
-    for (let rental of customer.rentals) {
-        totalFrequentPoints += rental.frequentRenterPoints;
-    }
-    return totalFrequentPoints;
-}
-
 function textStatement(customerParams, moviesParams) {
     const customer = new Customer(customerParams, moviesParams);
     let result = `Rental Record for ${customer.name}\n`;
@@ -84,7 +84,7 @@ function textStatement(customerParams, moviesParams) {
         result += `\t${rental.movie.title}\t${rental.amount}\n`;
     }
     result += `Amount owed is ${customer.totalAmount}\n`;
-    result += `You earned ${getTotalFrequentPoints(customer)} frequent renter points\n`;
+    result += `You earned ${customer.totalFrequentPoints} frequent renter points\n`;
     return result;
 }
 
@@ -95,7 +95,7 @@ function htmlStatement(customerParams, moviesParams) {
         result += `<p>${rental.movie.title}\t${rental.amount}</p>\n`;
     }
     result += `<p>Amount owed is ${customer.totalAmount}</p>\n`;
-    result += `<p>You earned ${getTotalFrequentPoints(customer)} frequent renter points</p>\n`;
+    result += `<p>You earned ${customer.totalFrequentPoints} frequent renter points</p>\n`;
     return result;
 }
 
