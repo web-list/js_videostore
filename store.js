@@ -30,13 +30,13 @@ class Rental {
         return this._movies[this.movieID];
     }
 
+    get frequentRenterPoints() {
+        if (this.movie.code === "new" && this.days > 2) return 2; else return 1;
+    }
+
     get days() {
         return this._data.days;
     }
-}
-
-function getFrequentRenterPoints(rental) {
-    if (rental.movie.code === "new" && rental.days > 2) return 2; else return 1;
 }
 
 function getAmount(rental) {
@@ -72,7 +72,7 @@ function getTotalAmount(customer) {
 function getTotalFrequentPoints(customer) {
     let totalFrequentPoints = 0;
     for (let rental of customer.rentals) {
-        totalFrequentPoints += getFrequentRenterPoints(rental);
+        totalFrequentPoints += rental.frequentRenterPoints;
     }
     return totalFrequentPoints;
 }
