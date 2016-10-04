@@ -38,39 +38,39 @@ class Rental {
         if (this.movie.code === "new" && this.days > 2) return 2; else return 1;
     }
 
-}
-
-function statement(customerData, movies) {
-    let customer = new Customer(customerData, movies);
-    let result = `Rental Record for ${customer.name}\n`;
-
-     function amountFor(movie, rental) {
+    get amount() {
         let thisAmount = 0;
-        switch (movie.code) {
+        switch (this.movie.code) {
             case "regular":
                 thisAmount = 2;
-                if (rental.days > 2) {
-                    thisAmount += (rental.days - 2) * 1.5;
+                if (this.days > 2) {
+                    thisAmount += (this.days - 2) * 1.5;
                 }
                 break;
             case "new":
-                thisAmount = rental.days * 3;
+                thisAmount = this.days * 3;
                 break;
             case "childrens":
                 thisAmount = 1.5;
-                if (rental.days > 3) {
-                    thisAmount += (rental.days - 3) * 1.5;
+                if (this.days > 3) {
+                    thisAmount += (this.days - 3) * 1.5;
                 }
                 break;
         }
         return thisAmount;
     }
 
+}
+
+function statement(customerData, movies) {
+    let customer = new Customer(customerData, movies);
+    let result = `Rental Record for ${customer.name}\n`;
+
      function getTotalAmount(customer, movies) {
         let totalAmount = 0;
         for (let rental of customer.rentals) {
             let movie = movies[rental.movieID];
-            totalAmount += amountFor(movie, rental);
+            totalAmount += rental.amount;
         }
         return totalAmount;
     }
@@ -86,7 +86,7 @@ function statement(customerData, movies) {
 
     for (let rental of customer.rentals) {
         let movie = movies[rental.movieID];
-        result += `\t${movie.title}\t${amountFor(movie, rental)}\n`;
+        result += `\t${movie.title}\t${rental.amount}\n`;
     }
     // add footer lines
     result += `Amount owed is ${getTotalAmount(customer, movies)}\n`;
