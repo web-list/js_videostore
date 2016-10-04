@@ -7,7 +7,7 @@ function statement(customer, movies) {
         if (movie.code === "new" && rental.days > 2) return 2; else return 1;
     };
 
-    let thisAmountInc = function (movie, rental) {
+     function amountFor(movie, rental) {
         let thisAmount = 0;
         switch (movie.code) {
             case "regular":
@@ -27,29 +27,29 @@ function statement(customer, movies) {
                 break;
         }
         return thisAmount;
-    };
+    }
 
-    let getTotalAmount = function(customer, movies) {
+     function getTotalAmount(customer, movies) {
         let totalAmount = 0;
         for (let rental of customer.rentals) {
             let movie = movies[rental.movieID];
-            totalAmount += thisAmountInc(movie, rental);
+            totalAmount += amountFor(movie, rental);
         }
         return totalAmount;
-    };
+    }
 
-    let getTotalFrequentPoints = function() {
+    function getTotalFrequentPoints() {
         let totalFrequentPoints = 0;
         for (let rental of customer.rentals) {
             let movie = movies[rental.movieID];
             totalFrequentPoints += frequentRenterPointsInc(movie, rental);
         }
         return totalFrequentPoints;
-    };
+    }
 
     for (let rental of customer.rentals) {
         let movie = movies[rental.movieID];
-        result += `\t${movie.title}\t${thisAmountInc(movie, rental)}\n`;
+        result += `\t${movie.title}\t${amountFor(movie, rental)}\n`;
     }
     // add footer lines
     result += `Amount owed is ${getTotalAmount(customer, movies)}\n`;
