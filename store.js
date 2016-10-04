@@ -22,6 +22,14 @@ class Customer {
         return amount;
     }
 
+    get totalFrequentPoints() {
+        let frequentPoints = 0;
+        for (let rental of this.rentals) {
+            frequentPoints += rental.frequentRenterPointsInc;
+        }
+        return frequentPoints;
+    }
+
 }
 
 class Rental {
@@ -74,22 +82,13 @@ function statement(customerData, movies) {
     let customer = new Customer(customerData, movies);
     let result = `Rental Record for ${customer.name}\n`;
 
-    function getTotalFrequentPoints() {
-        let totalFrequentPoints = 0;
-        for (let rental of customer.rentals) {
-            let movie = movies[rental.movieID];
-            totalFrequentPoints += rental.frequentRenterPointsInc;
-        }
-        return totalFrequentPoints;
-    }
-
     for (let rental of customer.rentals) {
         let movie = movies[rental.movieID];
         result += `\t${movie.title}\t${rental.amount}\n`;
     }
     // add footer lines
     result += `Amount owed is ${customer.totalAmount}\n`;
-    result += `You earned ${getTotalFrequentPoints()} frequent renter points\n`;
+    result += `You earned ${customer.totalFrequentPoints} frequent renter points\n`;
 
     return result;
 }
