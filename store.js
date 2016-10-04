@@ -78,7 +78,7 @@ class Rental {
 
 }
 
-function statement(customerData, movies) {
+function textStatement(customerData, movies) {
     let customer = new Customer(customerData, movies);
     let result = `Rental Record for ${customer.name}\n`;
 
@@ -89,6 +89,25 @@ function statement(customerData, movies) {
     // add footer lines
     result += `Amount owed is ${customer.totalAmount}\n`;
     result += `You earned ${customer.totalFrequentPoints} frequent renter points\n`;
+
+    return result;
+}
+
+function htmlStatement(customerData, movies) {
+    let customer = new Customer(customerData, movies);
+    let result = `<h1>Rental Record for ${customer.name}</h1>\n`;
+    result += '<ul>\n';
+
+    for (let rental of customer.rentals) {
+        let movie = movies[rental.movieID];
+        result += `<li>\t${movie.title}\t${rental.amount}</li>\n`;
+    }
+
+    result += '</ul>\n';
+
+    // add footer lines
+    result += `<p>Amount owed is ${customer.totalAmount}</p>\n`;
+    result += `<p>You earned ${customer.totalFrequentPoints} frequent renter points</p>\n`;
 
     return result;
 }
@@ -116,4 +135,5 @@ let movies = {
     // etc
 };
 
-console.log(statement(customer, movies));
+console.log(textStatement(customer, movies));
+console.log(htmlStatement(customer, movies));
