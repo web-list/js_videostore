@@ -14,6 +14,14 @@ class Customer {
         return this._data.rentals.map(rentalData => new Rental(rentalData, this.movies));
     }
 
+    get totalAmount() {
+        let amount = 0;
+        for (let rental of this.rentals) {
+            amount += rental.amount;
+        }
+        return amount;
+    }
+
 }
 
 class Rental {
@@ -66,15 +74,6 @@ function statement(customerData, movies) {
     let customer = new Customer(customerData, movies);
     let result = `Rental Record for ${customer.name}\n`;
 
-     function getTotalAmount(customer, movies) {
-        let totalAmount = 0;
-        for (let rental of customer.rentals) {
-            let movie = movies[rental.movieID];
-            totalAmount += rental.amount;
-        }
-        return totalAmount;
-    }
-
     function getTotalFrequentPoints() {
         let totalFrequentPoints = 0;
         for (let rental of customer.rentals) {
@@ -89,7 +88,7 @@ function statement(customerData, movies) {
         result += `\t${movie.title}\t${rental.amount}\n`;
     }
     // add footer lines
-    result += `Amount owed is ${getTotalAmount(customer, movies)}\n`;
+    result += `Amount owed is ${customer.totalAmount}\n`;
     result += `You earned ${getTotalFrequentPoints()} frequent renter points\n`;
 
     return result;
