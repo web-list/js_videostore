@@ -33,15 +33,16 @@ class Rental {
     get movie() {
         return this.movies[this.movieID];
     }
+
+    get frequentRenterPointsInc() {
+        if (this.movie.code === "new" && this.days > 2) return 2; else return 1;
+    }
+
 }
 
 function statement(customerData, movies) {
     let customer = new Customer(customerData, movies);
     let result = `Rental Record for ${customer.name}\n`;
-
-    let frequentRenterPointsInc = function (movie, rental) {
-        if (movie.code === "new" && rental.days > 2) return 2; else return 1;
-    };
 
      function amountFor(movie, rental) {
         let thisAmount = 0;
@@ -78,7 +79,7 @@ function statement(customerData, movies) {
         let totalFrequentPoints = 0;
         for (let rental of customer.rentals) {
             let movie = movies[rental.movieID];
-            totalFrequentPoints += frequentRenterPointsInc(movie, rental);
+            totalFrequentPoints += rental.frequentRenterPointsInc;
         }
         return totalFrequentPoints;
     }
