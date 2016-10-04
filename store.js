@@ -1,8 +1,9 @@
 "use strict";
 
 class Customer {
-    constructor(data) {
+    constructor(data, movies) {
         this._data = data;
+        this.movies = movies;
     }
 
     get name() {
@@ -10,14 +11,15 @@ class Customer {
     }
 
     get rentals() {
-        return this._data.rentals.map(rentalData => new Rental(rentalData));
+        return this._data.rentals.map(rentalData => new Rental(rentalData, this.movies));
     }
 
 }
 
 class Rental {
-    constructor(data) {
+    constructor(data, movies) {
         this._data = data;
+        this.movies = movies;
     }
 
     get movieID() {
@@ -27,10 +29,14 @@ class Rental {
     get days() {
         return this._data.days;
     }
+
+    get movie() {
+        return this.movies[this.movieID];
+    }
 }
 
 function statement(customerData, movies) {
-    let customer = new Customer(customerData);
+    let customer = new Customer(customerData, movies);
     let result = `Rental Record for ${customer.name}\n`;
 
     let frequentRenterPointsInc = function (movie, rental) {
